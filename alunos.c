@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 struct aluno{
 	char nome[50];
@@ -46,7 +47,62 @@ void buscar(Lista *l){
 	if(aux == NULL){
 		printf("Lista vazia!!");
 	}else{
+		int opcao;
+		bool encontrou = false;
+
+DENOVO:		printf("Qual a forma de busca:\n");
+		printf("1) Nome\n");
+		printf("2) Matricula\n");
 		
+		scanf("%i", &opcao);
+
+		switch(opcao){
+			case 1:
+				char nome[50];
+				printf("Digite o nome: ");
+				scanf(" %[^\n]", nome);
+				while(aux != NULL){
+					if(strcmp(aux->valor.nome ,nome) == 0){
+						printf("\n--------------\n");
+						printf("Nome: %s\n", aux->valor.nome);
+						printf("Idade: %d\n", aux->valor.idade);
+						printf("Matricula: %d", aux->valor.matricula);
+						printf("\n--------------\n");
+						
+						encontrou = true;
+			
+					}
+					aux = aux->prox;
+				}
+				if(!encontrou){
+					printf("Aluno não encontrado!!");
+				}
+				break;
+			case 2:
+				int matricula;
+				printf("Digite a matricula: ");
+				scanf("%i", &matricula);
+				while(aux != NULL){
+					if(aux->valor.matricula == matricula){
+						printf("\n--------------\n");
+                                                printf("Nome: %s\n", aux->valor.nome);
+                                                printf("Idade: %d\n", aux->valor.idade);
+                                                printf("Matricula: %d", aux->valor.matricula);
+                                                printf("\n--------------\n");
+
+                                                encontrou = true;
+	
+					}
+					aux = aux->prox;
+				}
+					if(!encontrou) printf("Aluno não encontrado!!");
+				break;
+			default:
+				printf("Opção incorreta!!\n");
+				goto DENOVO;
+
+		}
+
 	}
 }
 
@@ -102,7 +158,32 @@ REFAZ:  scanf("%d", &matricula);
 }
 
 void excluir(Lista *l){
+	if(l->inicio == NULL) printf("Nada a excluir!");
+	else{
+		No *aux, *aux2;
+		aux = l->inicio;
+		aux2 = NULL;
 
+		int matricula;
+		printf("Digite a matricula do aluno para excluir: ");
+		scanf("%d", &matricula);
+
+		while(aux != NULL && aux->valor.matricula != matricula){
+			aux2 = aux;
+			aux = aux->prox;	
+		}
+
+		if(aux == NULL){
+		       	printf("Aluno não encontrado!!");
+			return;
+		}
+
+		if(aux2 == NULL)l->inicio = aux->prox;
+		else aux2->prox = aux->prox;
+		free(aux);
+		printf("O aluno de matricula %d foi removido!!\n", matricula);
+
+	}
 }
 
 void main(){
